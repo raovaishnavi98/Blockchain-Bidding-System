@@ -242,7 +242,10 @@ if __name__=='__main__':
                try:
 
                    k=showbids()
-                   print(k) 
+                   print("BidderID\tName\tItemID\tAmount\tBidTime")
+                   for bid in k:
+                        bid = bid.split('@')
+                        print(bid)
                except Exception as e:
                    print(e)
 
