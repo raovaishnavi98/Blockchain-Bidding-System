@@ -108,6 +108,7 @@ def send_to_rest_api(suffix, data=None, content_type=None):
             if data is not None:
                 
                 result = requests.post(url, headers=headers, data=data)
+                print(url)
             else:
                 
                 print(url)
@@ -240,10 +241,10 @@ if __name__=='__main__':
         if(argv[1]=="showBid"):
                try:
 
-                   k=showbid()
+                   k=showbids()
                    print(k) 
-               except:
-                   print("e")
+               except Exception as e:
+                   print(e)
 
         if(argv[1]=="votefor"):
                 try:

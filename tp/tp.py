@@ -18,7 +18,7 @@ family = "bidding"
 
 FAMILY_NAME = hash("bidding")[:6]
 BIDDING_ENTRY_TABLE = hash("Bidding entries")[:6]
-BIDS_TABLE = hash("bids")
+BIDS_TABLE = hash("bidders")
 
 ITEMS_TABLE = hash("items")
 
@@ -49,25 +49,27 @@ class BiddingTransactionHandler(TransactionHandler):
         payload_list = transaction.payload.decode().split(",")
         try:
             action = payload_list[0]
-            itemName = payload_list[1]
+            data = payload_list[1]
         except:
-            itemName = ''
+            data = ''
 
         # Get the signer's public key, sent in the header from the client.
-        from_key = itemName
+        from_key = data
 
         # Perform the action.
         LOGGER.info("Action = %s.", action)
-        LOGGER.info("Name\ = %s.", itemName)
+        LOGGER.info("Name\ = %s.", data)
         
         if action == "addItem":
-            self._add(context, itemName)
-        elif action=="addBids":
-            self._addvoter(context,itemName)
+            self._add(context, data)
+        elif action=="addBid":
+            self._addbid(context,data)
         elif action == "count":
             self._count(context)
         elif action=="showItem":
             self._show(context)
+        elif action=="showBid":
+            self._showbids(context)
         
         elif action == "clear":
             self._empty_cookie_jar(context, partyName, from_key)
@@ -86,6 +88,16 @@ class BiddingTransactionHandler(TransactionHandler):
            
         LOGGER.debug("exiting show")
 
+    @classmethod
+    def _showbids(cls, context):
+        LOGGER.debug("entering show")
+        state_entries = context.get_state([BIDS_TABLE])
+        
+        for i in list:
+            print (i)
+            LOGGER.debug("items")
+           
+        LOGGER.debug("exiting show")
 
     @classmethod
     def _add(cls, context, itemName):
@@ -109,7 +121,7 @@ class BiddingTransactionHandler(TransactionHandler):
 
 
     @classmethod
-    def _addvoter(cls, context, bidName):
+    def _addbid(cls, context, bidName):
         LOGGER.debug("entering add")
         state_entries = context.get_state([BIDS_TABLE])
         if state_entries:
