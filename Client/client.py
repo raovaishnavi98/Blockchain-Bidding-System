@@ -227,7 +227,13 @@ if __name__=='__main__':
         if(argv[1]=="showItem"):
                try:
                    k=showitems()
-                   print(k)  
+                   k=k.split(',')
+
+                   print("ItemID\tName\tDesc\tTS\tDuration")
+                   for item in k:
+                        item = item.split('@')
+                        print(item)
+
                except:
                    print("e")
 

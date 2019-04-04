@@ -28,7 +28,7 @@ ITEMS_TABLE = FAMILY_NAME + BIDDING_ENTRY_TABLE + ITEMS_TABLE[:58]
 
 def getItemAddress(itemName):
     return FAMILY_NAME + BIDDING_ENTRY_TABLE + hash(itemName)[:58]
-class BiingTransactionHandler(TransactionHandler):
+class BiddingTransactionHandler(TransactionHandler):
     def __init__(self, namespace_prefix):
         self._namespace_prefix = namespace_prefix
 
@@ -149,7 +149,7 @@ def main():
         # Register the Transaction Handler and start it.
         processor = TransactionProcessor(url=DEFAULT_URL)
         sw_namespace = FAMILY_NAME
-        handler = BiddingJarTransactionHandler(sw_namespace)
+        handler = BiddingTransactionHandler(sw_namespace)
         processor.add_handler(handler)
         processor.start()
     except KeyboardInterrupt:
