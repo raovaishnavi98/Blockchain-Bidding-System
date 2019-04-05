@@ -8,6 +8,7 @@ import random
 import time
 import requests
 import yaml
+import datetime
 
 from sawtooth_signing import create_context
 from sawtooth_signing import CryptoFactory
@@ -77,19 +78,74 @@ def showbids():
             return None
 
 def itemaddition(itemName):
-	namespace=FAMILY_NAME+hash("Bidding entries",6)+hash(itemName,58)
-	
-	wrap_and_send("addItem",str(itemName))
+        namespace=FAMILY_NAME+hash("Bidding entries",6)+hash(itemName,58)
+        print("CURRENT TIME         ",str(datetime.datetime.now()))
+        timestamp = str(datetime.datetime.now()+datetime.timedelta(hours=int(itemName.split('@')[-1])))
+        print("EXPIRY TIME          ",timestamp)
+        itemName = itemName+"@"+timestamp
+        wrap_and_send("addItem",str(itemName))
+
+'''def bidaddition(Name):
+	namespace=FAMILY_NAME+hash("Bidding entries",6)+hash(Name,58)
+	timestamp = str(datetime.datetime.now().time())
+	#this is a comment
+	Name = Name+"@"+timestamp
+	k = showbids()
+	k=k.split(',')
+              
+        #for item in k:
+        #    bid = bid.split('@')
+        #    if bid[2] == item[1]
+        #         if bid[5][
+           
+        wrap_and_send("addBid",str(Name))'''
 
 def bidaddition(Name):
-	namespace=FAMILY_NAME+hash("Bidding entries",6)+hash(Name,58)
-	
-	wrap_and_send("addBid",str(Name))
+        namespace = FAMILY_NAME+hash("Bidding entries",6)+hash(Name,58)
+        timestamp1 = datetime.datetime.now()
+        timestamp = str(timestamp1)
+        list1=[]
+        Name = Name + "@" + timestamp
+        values = Name.split('@')
+        k = showitems()
+        k=k.split(',')
+        #print ("k - ",k)
+        for item in k:
+             item=item.split('@')
+             if item[0]==values[1]:
+                 print(item[-1] + " " + timestamp)
+                 if item[-1]<timestamp:
+                     print ("Bidding closed bro")
+                     #function to print winning bidder keyword:keyword
+                     bids = showbids()
+                     bids = bids.split(',')
+                     m = 0 
+                     #print ("bids - ",bids)
+                     for bid in bids:
+                          bid = bid.split('@')
+                          if bid[1]==item[0]:
+                              if int(bid[3])>max:
+                                   m=int(bid[3])
+                                   bidder_id= bid[0]
+                     print ("Winner id = "+bidder_id)
+                     return
+        bids = showbids()
+        bids = bids.split(',')
+        #print ("bids - ",bids)
+        for bid in bids:
+             bid = bid.split('@')
+             if values[1]==bid[1]:
+                 list1.append(bid)
+                 #print('difference ',str((timestamp1-item[-1])))
+                 if list1[-1][3]>values[3]:
+                      print ("BID TOO LOW")
+                      return         
+        wrap_and_send("addBid",str(Name))
+
 
 #def castVote(partyName):
-#	namespace=FAMILY_NAME+hash("Voting entries",6)+hash(partyName,58)
-#	pass
-
+#namespace=FAMILY_NAME+hash("Voting entries",6)+hash(partyName,58)
+#pass
 
 def send_to_rest_api(suffix, data=None, content_type=None):
         '''Send a REST command to the Validator via the REST API.
@@ -108,10 +164,10 @@ def send_to_rest_api(suffix, data=None, content_type=None):
             if data is not None:
                 
                 result = requests.post(url, headers=headers, data=data)
-                print(url)
+                #print(url)
             else:
                 
-                print(url)
+                #print(url)
 	
                 result = requests.get(url, headers=headers)
 
@@ -230,7 +286,7 @@ if __name__=='__main__':
                    k=showitems()
                    k=k.split(',')
 
-                   print("ItemID\tName\tDesc\tTS\tDuration")
+                   print("ItemID\tName\tDesc\tDuration\tTime Stamp")
                    for item in k:
                         item = item.split('@')
                         print(item)
@@ -242,10 +298,12 @@ if __name__=='__main__':
                try:
 
                    k=showbids()
-                   print("BidderID\tName\tItemID\tAmount\tBidTime")
-                   for bid in k:
-                        bid = bid.split('@')
-                        print(bid)
+                   k=k.split(',')
+              
+                   print("BidderID\tItemID\tBidID\tAmount\tTime Stamp")
+                   for item in k:
+                        item = item.split('@')
+                        print(item) 
                except Exception as e:
                    print(e)
 

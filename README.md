@@ -9,4 +9,5 @@ tp.py- This is the transaction processor. It is incharge of handling all the kin
 
 docker-compose.yaml- This is the yaml file that is incharge of setting up and deploying all the containers, namely, validator, bidding-processor, bidding-client, rest-api and so on.
 
-Basic GUI framework is added.
+Future Enhancements: We need to implement the 4th transaction handle case. We also need a mechanism to find the winner of the bid. After that, we need to perfect the command line interface. After which, we hope to implement GUI!
+
